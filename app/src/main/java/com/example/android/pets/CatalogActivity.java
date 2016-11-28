@@ -15,33 +15,32 @@
  */
 package com.example.android.pets;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.example.android.pets.data.PetContract.PetEntry;
-import com.example.android.pets.data.PetDbHelper;
 
 
 /**
  * Displays list of pets that were entered and stored in the app.
  */
-public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     //private PetDbHelper mDbHelper;
 
@@ -78,8 +77,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         petListView.setAdapter(mCursorAdapter);
 
         // Kick off the loader
-        getLoaderManager().initLoader(PET_LOADER, null, this);
 
+        getLoaderManager().initLoader(PET_LOADER, null, this);
     }
 
     /**
@@ -141,26 +140,25 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        // Define a projection that specifies the columns from the table we care about.
-        String[] projection ={
-
+        // Define a projection that specifies the column frim the table we care about.
+        String [] projection = {
                 PetEntry._ID,
                 PetEntry.COLUMN_PET_NAME,
-                PetEntry.COLUMN_PET_BREED };
+                PetEntry.COLUMN_PET_BREED};
 
         // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(this, // Parent activity context
-                PetEntry.CONTENT_URI, // Provider content URI to query
-                projection,           // Columns to include in the resulting cursor
-                null,                 // No selection clause
-                null,                 // No selection arguments
-                null);                // Default sort order
+        return new CursorLoader(this,       // Parent activity context
+                PetEntry.CONTENT_URI,       // Provider content URI to query
+                projection,                 // Columns to include in the resulting cursor
+                null,                       // No selectio clause
+                null,                       // No selection arguments
+                null);                      // Default sort order
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        // Update the {@link PetCursorAdapter} with this new cursor containing updated pet data
+        // Update {@link PetCursorAdapter} with this new cursor containing updated pet data
         mCursorAdapter.swapCursor(data);
     }
 
