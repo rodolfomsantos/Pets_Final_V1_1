@@ -29,6 +29,7 @@ import android.support.design.widget.FloatingActionButton;
 
 import android.support.v7.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -108,7 +109,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
      * the pets database.
      */
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_catalog.xml file.
@@ -121,9 +121,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
      * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
      */
     private void insertPet() {
-
-//        //Gets the database in write mode
-//        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
@@ -142,6 +139,14 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     }
 
+    /**
+     * Helper method to delete all pets in the database.
+     */
+    private void deleteAllPets() {
+        int rowsDeleted = getContentResolver().delete(PetEntry.CONTENT_URI, null, null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
@@ -149,11 +154,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
                 insertPet();
-
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
-                // Do nothing for now
+                deleteAllPets();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -190,6 +194,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // Callback called when the data needs to be deleted
         mCursorAdapter.swapCursor(null);
     }
+
 }
 
 
